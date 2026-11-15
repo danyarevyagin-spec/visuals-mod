@@ -195,9 +195,9 @@ public class MenuScreen extends Screen {
 
     private void drawSidebar(Theme.P th, int acc, int R, int mx, int my, float dt) {
         int lx = px + 10, ly = py + 10;
-        rr(lx, ly, lx + 14, ly + 14, Math.min(R, 5), 0xFF000000 | acc);
-        tx("V", lx + 4, ly + 3, 0xFFFFFFFF);
-        tx("Visuals", lx + 20, ly + 3, th.text());
+        rr(lx, ly, lx + 20, ly + 14, Math.min(R, 5), 0xFF000000 | acc);
+        tx("КК", lx + 4, ly + 3, 0xFFFFFFFF);
+        tx("Visuals", lx + 26, ly + 3, th.text());
 
         // поиск
         int sx1 = px + 8, sy1 = py + 30, sx2 = px + SB_W - 8, sy2 = sy1 + 16;
@@ -238,8 +238,8 @@ public class MenuScreen extends Screen {
 
         // хлебные крошки
         String crumb = query.isEmpty() ? Features.CATS[cat] : "Поиск";
-        tx("Visuals", cx0, py + 10, th.sub());
-        int cw = tw("Visuals");
+        tx("КК Visuals", cx0, py + 10, th.sub());
+        int cw = tw("КК Visuals");
         tx("›", cx0 + cw + 5, py + 10, th.sub());
         tx(crumb, cx0 + cw + 15, py + 10, th.text());
         g.fill(cx0, py + 24, cx1, py + 25, Gfx.mul(th.line(), ga));

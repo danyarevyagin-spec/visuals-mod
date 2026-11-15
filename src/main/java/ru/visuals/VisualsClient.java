@@ -67,6 +67,7 @@ public class VisualsClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         Config.load();
+        Cosmetics.init();
 
         zoomKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.visuals.zoom", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_C, CATEGORY));
@@ -90,13 +91,13 @@ public class VisualsClient implements ClientModInitializer {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (m.equals(".bind add")) {
             bindState = 1;
-            say(mc, "§dVisuals§r: нажми кнопку для открытия меню (Esc — отмена).");
+            say(mc, "§dКК Visuals§r: нажми кнопку для открытия меню (Esc — отмена).");
         } else if (m.equals(".bind clear")) {
             Config.menuKey = -1;
             Config.save();
-            say(mc, "§dVisuals§r: кнопка меню удалена.");
+            say(mc, "§dКК Visuals§r: кнопка меню удалена.");
         } else {
-            say(mc, "§dVisuals§r: .bind add — назначить кнопку меню, .bind clear — убрать.");
+            say(mc, "§dКК Visuals§r: .bind add — назначить кнопку меню, .bind clear — убрать.");
         }
         return false;
     }
@@ -124,15 +125,25 @@ public class VisualsClient implements ClientModInitializer {
         handleMenuKey(mc);
         handleZoom(mc);
         trackSpeed(mc);
+        HudExtras.tick(mc);
+        applyAim();
         spawnParticles(mc);
+    }
+
+    private void applyAim() {
+        Entity a = HudExtras.aimed;
+        if (a != null && Features.TARGET.on() && Features.TG_AIM.value && passes(a, Features.TG_FILTER.index)) {
+            target = a;
+            targetTicks = Math.max(targetTicks, 8);
+        }
     }
 
     private void greet(MinecraftClient mc) {
         if (lastWorld == mc.world) return;
         lastWorld = mc.world;
         if (!Features.M_GREET.value) return;
-        if (Config.menuKey < 0) say(mc, "§dVisuals§r загружен. Напиши §f.bind add§r, чтобы выбрать кнопку меню.");
-        else say(mc, "§dVisuals§r загружен. Меню: §f" + menuKeyName() + "§r.");
+        if (Config.menuKey < 0) say(mc, "§dКК Visuals§r загружен. Напиши §f.bind add§r, чтобы выбрать кнопку меню.");
+        else say(mc, "§dКК Visuals§r загружен. Меню: §f" + menuKeyName() + "§r.");
     }
 
     private void handleBind(MinecraftClient mc) {
@@ -149,11 +160,11 @@ public class VisualsClient implements ClientModInitializer {
             if (!isDown(mc, k)) continue;
             bindState = 0;
             if (k == GLFW.GLFW_KEY_ESCAPE) {
-                say(mc, "§dVisuals§r: отменено.");
+                say(mc, "§dКК Visuals§r: отменено.");
             } else {
                 Config.menuKey = k;
                 Config.save();
-                say(mc, "§dVisuals§r: меню теперь на кнопке §f" + menuKeyName() + "§r.");
+                say(mc, "§dКК Visuals§r: меню теперь на кнопке §f" + menuKeyName() + "§r.");
             }
             menuWasDown = true;
             return;
@@ -253,6 +264,7 @@ public class VisualsClient implements ClientModInitializer {
     private void onAttack(Entity entity) {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.world == null) return;
+        HudExtras.onHit();
         if (!passes(entity, Features.TG_FILTER.index)) return;
         target = entity;
         targetTicks = Features.TG_TIME.geti() * 20;
@@ -413,12 +425,13 @@ public class VisualsClient implements ClientModInitializer {
         if (Features.COORDS.on()) renderCoords(ctx, mc, sw, sh);
         if (Features.EFFECTS.on()) renderEffects(ctx, mc, sw);
         if (Features.ARMOR.on()) renderArmor(ctx, mc, sw, sh);
+        HudExtras.render(ctx, mc, sw, sh);
     }
 
     private void renderWatermark(DrawContext ctx, MinecraftClient mc, int sw) {
         Theme.P th = Theme.cur();
         List<String> parts = new ArrayList<>();
-        if (Features.W_NAME.value) parts.add("Visuals");
+        if (Features.W_NAME.value) parts.add("КК Visuals");
         if (Features.W_USER.value) parts.add(mc.player.getName().getString());
         if (Features.W_FPS.value) parts.add(mc.getCurrentFps() + " fps");
         if (Features.W_PING.value && !mc.isInSingleplayer() && mc.getNetworkHandler() != null) {

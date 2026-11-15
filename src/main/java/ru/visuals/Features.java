@@ -10,7 +10,7 @@ public final class Features {
     private Features() { }
 
     public static final List<Feature> ALL = new ArrayList<>();
-    public static final String[] CATS = {"Основное", "Визуалы", "Интерфейс", "Тема"};
+    public static final String[] CATS = {"Основное", "Визуалы", "Фигура", "Интерфейс", "Тема"};
 
     public static final String[] PARTICLE_NAMES = {
             "Звёзды", "Магия", "Искры", "Руны", "Снежинки", "Души", "Огонь",
@@ -49,7 +49,7 @@ public final class Features {
     });
 
     public static final Feature ABOUT = feat("about", "О моде", "Основное", false, false);
-    public static final Setting.Info A_VER = ABOUT.info(() -> "Visuals 1.2.0");
+    public static final Setting.Info A_VER = ABOUT.info(() -> "КК Visuals 1.3.0");
     public static final Setting.Info A_MC = ABOUT.info(() -> "Minecraft 1.21.4 · Fabric");
 
     // ===================== ВИЗУАЛЫ =====================
@@ -72,6 +72,8 @@ public final class Features {
     public static final Setting.Num TG_TIME = TARGET.num("time", "Время показа", 1, 20, 1, 5, " с");
     public static final Setting.Mode TG_FILTER = TARGET.mode("filter", "Цели", 0, TARGET_FILTER);
 
+    public static final Setting.Bool TG_AIM = TARGET.bool("aim", "Показывать при наведении", true);
+
     public static final Feature HIT = feat("hit", "Hit Bubble", "Визуалы", true, true);
     public static final Setting.Mode H_STYLE = HIT.mode("style", "Частицы", 1, PARTICLE_NAMES);
     public static final Setting.Mode H_SHAPE = HIT.mode("shape", "Форма", 0, "Сфера", "Кольцо", "Фонтан", "Спираль");
@@ -91,6 +93,88 @@ public final class Features {
     public static final Setting.Num P_SPEED = PART.num("speed", "Скорость", 0.2, 3, 0.1, 1, "x");
     public static final Setting.Bool P_NIGHT = PART.bool("night", "Только ночью", false);
     public static final Setting.Bool P_OUTDOOR = PART.bool("outdoor", "Только под открытым небом", false);
+
+
+    public static final Feature TI = feat("tinfo", "Инфо о цели", "Визуалы", true, true);
+    public static final Setting.Num TI_RANGE = TI.num("range", "Дальность", 5, 64, 1, 32, " м");
+    public static final Setting.Mode TI_POS = TI.mode("pos", "Позиция", 0, "Справа от прицела", "Снизу", "Сверху", "Слева от прицела");
+    public static final Setting.Mode TI_FILTER = TI.mode("filter", "Цели", 0, TARGET_FILTER);
+    public static final Setting.Bool TI_DIST = TI.bool("dist", "Расстояние", true);
+    public static final Setting.Bool TI_ARMORVAL = TI.bool("armorval", "Значение брони", true);
+    public static final Setting.Bool TI_ARMOR = TI.bool("armor", "Надетая броня", true);
+    public static final Setting.Bool TI_HANDS = TI.bool("hands", "Предметы в руках", true);
+    public static final Setting.Bool TI_NAMES = TI.bool("names", "Названия предметов", true);
+    public static final Setting.Bool TI_DUR = TI.bool("dur", "Прочность на иконках", true);
+    public static final Setting.Bool TI_THROUGH = TI.bool("through", "Сквозь блоки", false);
+    public static final Setting.Num TI_HOLD = TI.num("hold", "Задержка", 0, 3, 0.5, 1, " с");
+    public static final Setting.Num TI_RADIUS = TI.num("radius", "Скругление", 0, 10, 1, 6, "");
+    public static final Setting.Num TI_OPACITY = TI.num("opacity", "Прозрачность", 10, 100, 5, 75, "%");
+
+    // ===================== ФИГУРА (косметика) =====================
+    public static final Feature COS = feat("cos", "Общие", "Фигура", false, false);
+    public static final Setting.Mode COS_WHO = COS.mode("who", "Кому показывать", 0, "Только мне", "Всем игрокам");
+    public static final Setting.Info COS_HINT = COS.info(() -> "Видно от третьего лица (F5)");
+    public static final Setting.Action COS_OFF = COS.action("Выключить всю косметику", () -> {
+        Features.WINGS.enabled.value = false;
+        Features.HAT.enabled.value = false;
+        Features.HALO.enabled.value = false;
+        Features.HORNS.enabled.value = false;
+        Features.EARS.enabled.value = false;
+        Features.TAIL.enabled.value = false;
+        Config.save();
+    });
+
+    public static final Feature WINGS = feat("wings", "Крылья", "Фигура", true, false);
+    public static final Setting.Mode CW_STYLE = WINGS.mode("style", "Стиль", 0, "Ангельские", "Демон", "Бабочка", "Лучи");
+    public static final Setting.Color CW_C1 = WINGS.color("c1", "Основной цвет", 8);
+    public static final Setting.Color CW_C2 = WINGS.color("c2", "Второй цвет", 2);
+    public static final Setting.Bool CW_RAINBOW = WINGS.bool("rainbow", "Радуга", false);
+    public static final Setting.Num CW_SIZE = WINGS.num("size", "Размер", 0.5, 2, 0.1, 1, "x");
+    public static final Setting.Num CW_OPEN = WINGS.num("open", "Раскрытие", 0, 80, 5, 35, "°");
+    public static final Setting.Num CW_FLAP = WINGS.num("flap", "Взмах", 0, 30, 1, 12, "°");
+    public static final Setting.Num CW_SPEED = WINGS.num("speed", "Скорость взмаха", 0, 6, 0.5, 2, "x");
+    public static final Setting.Num CW_OPACITY = WINGS.num("opacity", "Непрозрачность", 20, 100, 5, 90, "%");
+
+    public static final Feature HAT = feat("hat", "Шляпа", "Фигура", true, false);
+    public static final Setting.Mode CH_STYLE = HAT.mode("style", "Стиль", 0, "Китайская", "Ведьмина", "Корона", "Цилиндр", "Колпак");
+    public static final Setting.Color CH_C1 = HAT.color("c1", "Основной цвет", 4);
+    public static final Setting.Color CH_C2 = HAT.color("c2", "Второй цвет", 5);
+    public static final Setting.Bool CH_RAINBOW = HAT.bool("rainbow", "Радуга", false);
+    public static final Setting.Num CH_SIZE = HAT.num("size", "Размер", 0.5, 2, 0.1, 1, "x");
+    public static final Setting.Num CH_HEIGHT = HAT.num("height", "Высота", 0.5, 2, 0.1, 1, "x");
+    public static final Setting.Num CH_LIFT = HAT.num("lift", "Подъём над головой", -0.1, 0.3, 0.01, 0.03, "");
+    public static final Setting.Num CH_OPACITY = HAT.num("opacity", "Непрозрачность", 20, 100, 5, 100, "%");
+
+    public static final Feature HALO = feat("halo", "Нимб", "Фигура", true, false);
+    public static final Setting.Color HL_C1 = HALO.color("c1", "Цвет", 4);
+    public static final Setting.Bool HL_RAINBOW = HALO.bool("rainbow", "Радуга", false);
+    public static final Setting.Num HL_SIZE = HALO.num("size", "Размер", 0.5, 2, 0.1, 1, "x");
+    public static final Setting.Num HL_LIFT = HALO.num("lift", "Высота", 0.05, 0.6, 0.05, 0.25, "");
+    public static final Setting.Num HL_BOB = HALO.num("bob", "Покачивание", 0, 0.1, 0.01, 0.03, "");
+    public static final Setting.Num HL_OPACITY = HALO.num("opacity", "Непрозрачность", 20, 100, 5, 90, "%");
+
+    public static final Feature HORNS = feat("horns", "Рожки", "Фигура", true, false);
+    public static final Setting.Mode HR_STYLE = HORNS.mode("style", "Форма", 0, "Прямые", "Изогнутые");
+    public static final Setting.Color HR_C1 = HORNS.color("c1", "Основной цвет", 6);
+    public static final Setting.Color HR_C2 = HORNS.color("c2", "Цвет кончиков", 8);
+    public static final Setting.Num HR_SIZE = HORNS.num("size", "Размер", 0.5, 2, 0.1, 1, "x");
+    public static final Setting.Num HR_OPACITY = HORNS.num("opacity", "Непрозрачность", 20, 100, 5, 100, "%");
+
+    public static final Feature EARS = feat("ears", "Кошачьи ушки", "Фигура", true, false);
+    public static final Setting.Color EA_C1 = EARS.color("c1", "Цвет ушек", 7);
+    public static final Setting.Color EA_C2 = EARS.color("c2", "Цвет внутри", 8);
+    public static final Setting.Num EA_SIZE = EARS.num("size", "Размер", 0.5, 2, 0.1, 1, "x");
+    public static final Setting.Bool EA_TWITCH = EARS.bool("twitch", "Подёргивание", true);
+    public static final Setting.Num EA_OPACITY = EARS.num("opacity", "Непрозрачность", 20, 100, 5, 100, "%");
+
+    public static final Feature TAIL = feat("tail", "Хвост", "Фигура", true, false);
+    public static final Setting.Mode TL_STYLE = TAIL.mode("style", "Вид", 0, "Кошачий", "Лисий");
+    public static final Setting.Color TL_C1 = TAIL.color("c1", "Основной цвет", 7);
+    public static final Setting.Color TL_C2 = TAIL.color("c2", "Цвет кончика", 8);
+    public static final Setting.Bool TL_RAINBOW = TAIL.bool("rainbow", "Радуга", false);
+    public static final Setting.Num TL_LENGTH = TAIL.num("length", "Длина", 0.5, 2, 0.1, 1, "x");
+    public static final Setting.Num TL_SWING = TAIL.num("swing", "Размах", 0, 1, 0.1, 0.6, "");
+    public static final Setting.Num TL_OPACITY = TAIL.num("opacity", "Непрозрачность", 20, 100, 5, 100, "%");
 
     // ===================== ИНТЕРФЕЙС =====================
     public static final Feature WM = feat("watermark", "Вотермарка", "Интерфейс", true, true);
@@ -132,6 +216,32 @@ public final class Features {
     public static final Setting.Bool A_HAND = ARMOR.bool("hand", "Предмет в руке", true);
     public static final Setting.Bool A_BG = ARMOR.bool("bg", "Фон", true);
     public static final Setting.Num A_OPACITY = ARMOR.num("opacity", "Прозрачность", 10, 100, 5, 60, "%");
+
+
+    public static final Feature CROSS = feat("cross", "Прицел", "Интерфейс", true, true);
+    public static final Setting.Mode X_STYLE = CROSS.mode("style", "Стиль", 0, "Крест", "Точка", "Круг", "Крест и точка",
+            "Квадрат", "Ромб", "Т-образный", "Уголки", "Звезда", "Круг с крестом");
+    public static final Setting.Color X_COLOR = CROSS.color("color", "Цвет", 0);
+    public static final Setting.Bool X_RAINBOW = CROSS.bool("rainbow", "Радуга", false);
+    public static final Setting.Num X_SIZE = CROSS.num("size", "Размер", 1, 20, 1, 5, "");
+    public static final Setting.Num X_GAP = CROSS.num("gap", "Зазор в центре", 0, 12, 1, 3, "");
+    public static final Setting.Num X_THICK = CROSS.num("thick", "Толщина", 1, 4, 1, 1, "");
+    public static final Setting.Bool X_OUTLINE = CROSS.bool("outline", "Чёрная обводка", true);
+    public static final Setting.Bool X_DOT = CROSS.bool("dot", "Точка в центре", false);
+    public static final Setting.Num X_OPACITY = CROSS.num("opacity", "Непрозрачность", 20, 100, 5, 100, "%");
+    public static final Setting.Bool X_DYNAMIC = CROSS.bool("dynamic", "Расходится при движении", true);
+    public static final Setting.Num X_DYN_AMT = CROSS.num("dynamt", "Сила расхождения", 0, 10, 1, 4, "");
+    public static final Setting.Bool X_TARGETCOL = CROSS.bool("targetcol", "Красный на цели", true);
+    public static final Setting.Bool X_HITMARK = CROSS.bool("hitmark", "Хитмаркер при ударе", true);
+    public static final Setting.Color X_HITCOL = CROSS.color("hitcol", "Цвет хитмаркера", 8);
+    public static final Setting.Num X_SPIN = CROSS.num("spin", "Вращение", 0, 8, 1, 0, "");
+    public static final Setting.Bool X_HIDE = CROSS.bool("hide", "Скрыть ванильный прицел", true);
+
+    public static final Feature CPS = feat("cps", "Счётчик CPS", "Интерфейс", true, false);
+    public static final Setting.Mode CPS_POS = CPS.mode("pos", "Позиция", 0, "Право низ", "Лево верх", "Под прицелом");
+    public static final Setting.Bool CPS_RMB = CPS.bool("rmb", "Показывать правую кнопку", true);
+    public static final Setting.Num CPS_RADIUS = CPS.num("radius", "Скругление", 0, 10, 1, 6, "");
+    public static final Setting.Num CPS_OPACITY = CPS.num("opacity", "Прозрачность", 10, 100, 5, 60, "%");
 
     // ===================== ТЕМА =====================
     public static final Feature TH_COLORS = feat("th_colors", "Цвета", "Тема", false, false);

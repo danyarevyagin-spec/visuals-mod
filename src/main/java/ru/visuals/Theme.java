@@ -42,4 +42,33 @@ public final class Theme {
         int bl = (int) ((a & 255) * (1 - t) + (b & 255) * t);
         return (r << 16) | (g << 8) | bl;
     }
+
+    /** Цвет из палитры настройки (индекс 0 = акцент темы). */
+    public static int pick(Setting.Color c) {
+        int i = c.index;
+        if (i <= 0) return accent();
+        return SWATCHES[Math.min(i, SWATCHES.length) - 1];
+    }
+
+    public static int hsv(float h, float s, float v) {
+        h = h - (float) Math.floor(h);
+        float c = v * s;
+        float x = c * (1 - Math.abs((h * 6) % 2 - 1));
+        float m = v - c;
+        float r, g, b;
+        int sector = (int) (h * 6);
+        switch (sector) {
+            case 0 -> { r = c; g = x; b = 0; }
+            case 1 -> { r = x; g = c; b = 0; }
+            case 2 -> { r = 0; g = c; b = x; }
+            case 3 -> { r = 0; g = x; b = c; }
+            case 4 -> { r = x; g = 0; b = c; }
+            default -> { r = c; g = 0; b = x; }
+        }
+        return (((int) ((r + m) * 255)) << 16) | (((int) ((g + m) * 255)) << 8) | ((int) ((b + m) * 255));
+    }
+
+    public static int rainbow(float time, float offset) {
+        return hsv(time * 0.15f + offset, 0.65f, 1f);
+    }
 }
