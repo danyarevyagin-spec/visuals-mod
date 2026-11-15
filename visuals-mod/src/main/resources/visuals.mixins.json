@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "ru.visuals.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "SimpleOptionAccessor",
+    "InGameHudMixin",
+    "LivingEntityMixin",
+    "MouseMixin"
+  ],
+  "injectors": { "defaultRequire": 1 }
+}

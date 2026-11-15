@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "visuals",
+  "version": "${version}",
+  "name": "Visuals",
+  "description": "Клиентские визуальные улучшения: Fullbright, Zoom, HUD.",
+  "authors": ["you"],
+  "environment": "client",
+  "entrypoints": { "client": ["ru.visuals.VisualsClient"] },
+  "mixins": ["visuals.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.4",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
