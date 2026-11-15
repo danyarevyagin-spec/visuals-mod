@@ -10,7 +10,7 @@ public final class Features {
     private Features() { }
 
     public static final List<Feature> ALL = new ArrayList<>();
-    public static final String[] CATS = {"Основное", "Визуалы", "Фигура", "Интерфейс", "Тема"};
+    public static final String[] CATS = {"Основное", "Визуалы", "Фигура", "Игра", "Интерфейс", "Тема"};
 
     public static final String[] PARTICLE_NAMES = {
             "Звёзды", "Магия", "Искры", "Руны", "Снежинки", "Души", "Огонь",
@@ -49,7 +49,7 @@ public final class Features {
     });
 
     public static final Feature ABOUT = feat("about", "О моде", "Основное", false, false);
-    public static final Setting.Info A_VER = ABOUT.info(() -> "КК Visuals 1.3.0");
+    public static final Setting.Info A_VER = ABOUT.info(() -> "КК Visuals 1.5.0");
     public static final Setting.Info A_MC = ABOUT.info(() -> "Minecraft 1.21.4 · Fabric");
 
     // ===================== ВИЗУАЛЫ =====================
@@ -73,6 +73,32 @@ public final class Features {
     public static final Setting.Mode TG_FILTER = TARGET.mode("filter", "Цели", 0, TARGET_FILTER);
 
     public static final Setting.Bool TG_AIM = TARGET.bool("aim", "Показывать при наведении", true);
+
+
+    public static final Feature DEATH = feat("death", "Death Animation", "Визуалы", true, false);
+    public static final Setting.Bool DA_67 = DEATH.bool("67", "Показывать 67 при убийстве", true);
+    public static final Setting.Bool DA_TUNG = DEATH.bool("tung", "Тунг-тунг Сахур с неба", true);
+    public static final Setting.Bool DA_MUSIC = DEATH.bool("music", "Музыка при убийстве", true);
+    public static final Setting.Bool DA_SHAKER = DEATH.bool("shaker", "Тряска экрана", true);
+    public static final Setting.Num DA_DURATION = DEATH.num("dur", "Длительность эффекта", 1, 8, 0.5, 3, " с");
+    public static final Setting.Mode DA_MODE = DEATH.mode("mode", "Вид 67", 0, "Текст", "Большой текст", "Частицы 6 и 7");
+
+    public static final Feature BADGE = feat("badge", "KK значок", "Визуалы", true, true);
+    public static final Setting.Bool BD_SELF = BADGE.bool("self", "Над своим ником", false);
+    public static final Setting.Mode BD_STYLE = BADGE.mode("style", "Стиль", 0, "KK", "✦KK✦", "《KK》", "✮KK✮");
+    public static final Setting.Color BD_COLOR = BADGE.color("color", "Цвет", 1);
+    public static final Setting.Bool BD_RAINBOW = BADGE.bool("rainbow", "Радуга", true);
+    public static final Setting.Num BD_SCALE = BADGE.num("scale", "Размер", 0.5, 2, 0.1, 1, "x");
+    public static final Setting.Num BD_Y = BADGE.num("y", "Высота над ником", 0, 1.5, 0.1, 0.5, "");
+
+    public static final Feature MPLAYER = feat("mplayer", "Плеер музыки", "Интерфейс", true, false);
+    public static final Setting.Bool MP_SHUFFLE = MPLAYER.bool("shuffle", "Случайный порядок", false);
+    public static final Setting.Bool MP_LOOP = MPLAYER.bool("loop", "Повтор", true);
+    public static final Setting.Num MP_VOL = MPLAYER.num("vol", "Громкость", 0, 100, 5, 70, "%");
+    public static final Setting.Mode MP_POS = MPLAYER.mode("pos", "Позиция плеера", 0, "Лево верх", "Право верх", "Лево низ");
+    public static final Setting.Bool MP_MINIFY = MPLAYER.bool("minify", "Мини-режим", false);
+    public static final Setting.Info MP_HINT = MPLAYER.info(() -> "Нажмите CTRL+P чтобы открыть плейлист");
+    public static final Setting.Action MP_OPEN = MPLAYER.action("Открыть файловый менеджер", () -> MusicPlayer.openFileChooser());
 
     public static final Feature HIT = feat("hit", "Hit Bubble", "Визуалы", true, true);
     public static final Setting.Mode H_STYLE = HIT.mode("style", "Частицы", 1, PARTICLE_NAMES);
@@ -176,6 +202,77 @@ public final class Features {
     public static final Setting.Num TL_SWING = TAIL.num("swing", "Размах", 0, 1, 0.1, 0.6, "");
     public static final Setting.Num TL_OPACITY = TAIL.num("opacity", "Непрозрачность", 20, 100, 5, 100, "%");
 
+
+    // ===================== ИГРА =====================
+    public static final Feature AR = feat("aspect", "Аспект", "Игра", true, false);
+    public static final Setting.Mode AR_PRESET = AR.mode("preset", "Соотношение сторон", 0,
+            "4:3", "5:4", "16:10", "16:9", "21:9", "3:2", "1:1", "32:9", "Свой");
+    public static final Setting.Num AR_CUSTOM = AR.num("custom", "Своё значение (ширина/высота)", 0.5, 3.5, 0.01, 1.33, "");
+    public static final Setting.Bool AR_SMOOTH = AR.bool("smooth", "Плавный переход", true);
+
+    public static final Feature MB = feat("mblur", "Motion Blur", "Игра", true, false);
+    public static final Setting.Num MB_STR = MB.num("str", "Сила размытия", 10, 90, 5, 55, "%");
+    public static final Setting.Bool MB_REACT = MB.bool("react", "Усиливать при движении камеры", true);
+    public static final Setting.Num MB_MIN = MB.num("min", "Размытие в покое", 0, 60, 5, 10, "%");
+    public static final Setting.Bool MB_ADAPT = MB.bool("adapt", "Подстраиваться под FPS", true);
+
+    public static final Feature OPT = feat("opt", "Оптимизация", "Игра", true, false);
+    public static final Setting.Bool OPT_VIEW_ON = OPT.bool("viewon", "Ограничить дальность прорисовки", true);
+    public static final Setting.Num OPT_VIEW = OPT.num("view", "Дальность прорисовки", 2, 32, 1, 10, " чанк.");
+    public static final Setting.Bool OPT_SIM_ON = OPT.bool("simon", "Ограничить дистанцию симуляции", true);
+    public static final Setting.Num OPT_SIM = OPT.num("sim", "Дистанция симуляции", 5, 32, 1, 8, " чанк.");
+    public static final Setting.Bool OPT_ENT_ON = OPT.bool("enton", "Ограничить дистанцию сущностей", false);
+    public static final Setting.Num OPT_ENT = OPT.num("ent", "Дистанция сущностей", 50, 100, 5, 70, "%");
+    public static final Setting.Bool OPT_CLOUDS = OPT.bool("clouds", "Отключить облака", true);
+    public static final Setting.Mode OPT_PART = OPT.mode("part", "Частицы игры", 1, "Не менять", "Уменьшенные", "Минимальные");
+    public static final Setting.Bool OPT_SHADOW = OPT.bool("shadow", "Отключить тени сущностей", true);
+    public static final Setting.Bool OPT_BLEND = OPT.bool("blend", "Минимальное смешивание биомов", true);
+    public static final Setting.Bool OPT_FAST = OPT.bool("fast", "Быстрая графика", false);
+    public static final Setting.Bool OPT_VSYNC = OPT.bool("vsync", "Выключить VSync", false);
+    public static final Setting.Bool OPT_FPS_ON = OPT.bool("fpson", "Лимит FPS", false);
+    public static final Setting.Num OPT_FPS = OPT.num("fps", "Максимум FPS (260 = без лимита)", 30, 260, 10, 144, "");
+    public static final Setting.Bool OPT_ADAPT = OPT.bool("adapt", "Адаптивные частицы мода", true);
+    public static final Setting.Num OPT_ADAPT_FPS = OPT.num("adaptfps", "Целевой FPS", 20, 120, 5, 60, "");
+
+    public static final Feature HAND = feat("hand", "Thing Animation", "Игра", true, false);
+    public static final Setting.Mode HA_APPLY = HAND.mode("apply", "Применять к", 0, "Руке и предмету", "Только предметам", "Только руке");
+    public static final Setting.Num HA_X = HAND.num("x", "Влево / вправо", -1, 1, 0.02, 0, "");
+    public static final Setting.Num HA_Y = HAND.num("y", "Вниз / вверх", -1, 1, 0.02, 0, "");
+    public static final Setting.Num HA_Z = HAND.num("z", "Ближе / дальше", -1, 1, 0.02, 0, "");
+    public static final Setting.Num HA_SCALE = HAND.num("scale", "Размер", 0.2, 2.5, 0.05, 1, "x");
+    public static final Setting.Num HA_RX = HAND.num("rx", "Наклон вперёд / назад", -90, 90, 5, 0, "°");
+    public static final Setting.Num HA_RY = HAND.num("ry", "Поворот в стороны", -90, 90, 5, 0, "°");
+    public static final Setting.Num HA_RZ = HAND.num("rz", "Крен", -90, 90, 5, 0, "°");
+    public static final Setting.Bool HA_MIRROR = HAND.bool("mirror", "Зеркалить для левой руки", true);
+    public static final Setting.Bool HA_OFFHAND = HAND.bool("offhand", "Применять к левой руке", true);
+    public static final Setting.Bool HA_EQUIP = HAND.bool("equip", "Плавная смена предмета", false);
+    public static final Setting.Bool HA_ANIM = HAND.bool("anim", "Своя анимация удара", false);
+    public static final Setting.Mode HA_TYPE = HAND.mode("type", "Тип анимации", 0,
+            "Ванильный", "Mode 1 (снизу вверх)", "Mode 2 (горизонтальный)", "HMI (вперёд)", "Сверху вниз",
+            "Блок-хит 1.8", "Маятник", "Круговой", "Плавный взмах");
+    public static final Setting.Mode HA_EASE = HAND.mode("ease", "Плавность", 0,
+            "Ease out", "Ease in-out", "Ease in", "Линейно", "Пружина");
+    public static final Setting.Num HA_TIME = HAND.num("time", "Длительность", 100, 1200, 25, 350, " мс");
+    public static final Setting.Num HA_POWER = HAND.num("power", "Сила", 0, 2, 0.1, 1, "x");
+    public static final Setting.Bool HA_SUPPRESS = HAND.bool("suppress", "Отключить ванильный взмах", true);
+    public static final Setting.Action HA_P1 = HAND.action("Пресет: классика 1.8", () -> preset(0.10, -0.12, 0.05, 0.9, 0, -10, 5));
+    public static final Setting.Action HA_P2 = HAND.action("Пресет: низко справа", () -> preset(0.20, -0.25, 0, 1.0, 0, 0, 0));
+    public static final Setting.Action HA_P3 = HAND.action("Пресет: по центру", () -> preset(-0.55, 0.0, 0.05, 1.0, 0, 0, 0));
+    public static final Setting.Action HA_P4 = HAND.action("Пресет: маленькая", () -> preset(0.05, -0.05, 0, 0.6, 0, 0, 0));
+    public static final Setting.Action HA_P5 = HAND.action("Пресет: большая", () -> preset(0.10, 0.0, 0, 1.5, 0, 0, 0));
+    public static final Setting.Action HA_P6 = HAND.action("Сбросить позицию", () -> preset(0, 0, 0, 1.0, 0, 0, 0));
+
+    private static void preset(double x, double y, double z, double sc, double rx, double ry, double rz) {
+        Features.HA_X.set(x);
+        Features.HA_Y.set(y);
+        Features.HA_Z.set(z);
+        Features.HA_SCALE.set(sc);
+        Features.HA_RX.set(rx);
+        Features.HA_RY.set(ry);
+        Features.HA_RZ.set(rz);
+        Config.save();
+    }
+
     // ===================== ИНТЕРФЕЙС =====================
     public static final Feature WM = feat("watermark", "Вотермарка", "Интерфейс", true, true);
     public static final Setting.Mode W_STYLE = WM.mode("style", "Стиль", 0, BG_STYLES);
@@ -273,6 +370,18 @@ public final class Features {
         T_SPEED.showIf(() -> T_ANIM.value);
         T_APPEAR.showIf(() -> T_ANIM.value);
         H_DEATH_MULT.showIf(() -> H_DEATH.value);
+        AR_CUSTOM.showIf(() -> AR_PRESET.index == 8);
+        OPT_VIEW.showIf(() -> OPT_VIEW_ON.value);
+        OPT_SIM.showIf(() -> OPT_SIM_ON.value);
+        OPT_ENT.showIf(() -> OPT_ENT_ON.value);
+        OPT_FPS.showIf(() -> OPT_FPS_ON.value);
+        OPT_ADAPT_FPS.showIf(() -> OPT_ADAPT.value);
+        MB_MIN.showIf(() -> MB_REACT.value);
+        HA_TYPE.showIf(() -> HA_ANIM.value);
+        HA_EASE.showIf(() -> HA_ANIM.value);
+        HA_TIME.showIf(() -> HA_ANIM.value);
+        HA_POWER.showIf(() -> HA_ANIM.value);
+        HA_SUPPRESS.showIf(() -> HA_ANIM.value);
     }
 
     public static void resetAll() {

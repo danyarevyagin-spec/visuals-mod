@@ -68,6 +68,7 @@ public class VisualsClient implements ClientModInitializer {
     public void onInitializeClient() {
         Config.load();
         Cosmetics.init();
+        KkBadge.init();
 
         zoomKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.visuals.zoom", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_C, CATEGORY));
@@ -115,6 +116,7 @@ public class VisualsClient implements ClientModInitializer {
     private void tick(MinecraftClient mc) {
         if (mc.options == null) return;
         applyFullbright(mc);
+        Optimizer.tick(mc);
         if (mc.player == null || mc.world == null) {
             lastWorld = null;
             return;
@@ -126,6 +128,7 @@ public class VisualsClient implements ClientModInitializer {
         handleZoom(mc);
         trackSpeed(mc);
         HudExtras.tick(mc);
+        MusicPlayer.tickKey(mc);
         applyAim();
         spawnParticles(mc);
     }
@@ -243,6 +246,8 @@ public class VisualsClient implements ClientModInitializer {
 
     private void restoreAll(MinecraftClient mc) {
         if (mc.options == null) return;
+        Optimizer.restoreAll();
+        MotionBlur.release();
         if (fbApplied) {
             writeGamma(mc, savedGamma);
             fbApplied = false;
@@ -265,6 +270,7 @@ public class VisualsClient implements ClientModInitializer {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.world == null) return;
         HudExtras.onHit();
+        DeathEffects.onKill();
         if (!passes(entity, Features.TG_FILTER.index)) return;
         target = entity;
         targetTicks = Features.TG_TIME.geti() * 20;
@@ -418,6 +424,7 @@ public class VisualsClient implements ClientModInitializer {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.player == null || mc.world == null || mc.options.hudHidden) return;
         if (mc.getDebugHud().shouldShowDebugHud()) return;
+        MotionBlur.run(ctx, mc);
         int sw = ctx.getScaledWindowWidth();
         int sh = ctx.getScaledWindowHeight();
 
@@ -426,6 +433,9 @@ public class VisualsClient implements ClientModInitializer {
         if (Features.EFFECTS.on()) renderEffects(ctx, mc, sw);
         if (Features.ARMOR.on()) renderArmor(ctx, mc, sw, sh);
         HudExtras.render(ctx, mc, sw, sh);
+        MusicPlayer.render(ctx, mc, sw, sh);
+        float dt2 = 1f / Math.max(1f, mc.getCurrentFps());
+        DeathEffects.render(ctx, mc, sw, sh, dt2);
     }
 
     private void renderWatermark(DrawContext ctx, MinecraftClient mc, int sw) {
